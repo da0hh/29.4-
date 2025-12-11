@@ -1,35 +1,36 @@
 #include <iostream>
 #include <vector>
+#include <string>
 
 class Talent
 {
-protected:
-	std::string name;
-	std::vector<std::string> talent_animal;
-
-	explicit Talent(const std::string& _name) : name(_name) {}
-
-	virtual void addTalent(std::string talent) { talent_animal.push_back(talent); }
-
-	virtual void showTalents() {
-		std::cout << "This is " << name << " and it has some talents:\n";
-		for (auto i = 0; i < talent_animal.size(); i++) {
-			std::cout << "\tIt can “" << talent_animal[i] << "”\n";
-		}
-	}
+public:
+	virtual std::string getDescription() = 0;
 };
 
-class Dog : virtual public Talent
-{
+class Swimming : public Talent {
 public:
-	explicit Dog(const std::string& _name) : Talent(_name) {}
+    std::string getDescription() { return "Swim"; }
+};
 
-	virtual void addTalent(std::string talent) { talent_animal.push_back(talent); }
+class Dancing : public Talent {
+public:
+    std::string getDescription() { return "Dance"; }
+};
 
-	virtual void showTalents() {
+class Dog
+{
+	std::string name;
+	std::vector<Talent*> talents;
+
+public:
+	Dog(const std::string _name) : name(_name) {}
+
+	void addTalent(Talent* talent) { talents.push_back(talent); }
+	void showTalents() {
 		std::cout << "This is " << name << " and it has some talents:\n";
-		for (auto i = 0; i < talent_animal.size(); i++) {
-			std::cout << "\tIt can “" << talent_animal[i] << "”\n";
+		for (auto i = 0; i < talents.size(); i++) {
+			std::cout << "\tIt can “" << talents[i] << "”\n";
 		}
 	}
 };
@@ -38,8 +39,8 @@ int main() {
 	setlocale(LC_ALL, "RU");
 	Dog dog1("Steve");
 
-	dog1.addTalent("Swim");
-	dog1.addTalent("Dance");
-	
+	dog1.addTalent(new Swimming);
+	dog1.addTalent(new Dancing);
+
 	dog1.showTalents();
 }
