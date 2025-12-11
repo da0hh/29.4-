@@ -1,3 +1,5 @@
+#include "ev1.h"
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -10,12 +12,12 @@ public:
 
 class Swimming : public Talent {
 public:
-    std::string getDescription() { return "Swim"; }
+	std::string getDescription() { return "Swim"; }
 };
 
 class Dancing : public Talent {
 public:
-    std::string getDescription() { return "Dance"; }
+	std::string getDescription() { return "Dance"; }
 };
 
 class Dog
@@ -29,8 +31,8 @@ public:
 	void addTalent(Talent* talent) { talents.push_back(talent); }
 	void showTalents() {
 		std::cout << "This is " << name << " and it has some talents:\n";
-		for (auto i = 0; i < talents.size(); i++) {
-			std::cout << "\tIt can “" << talents[i] << "”\n";
+		for (auto talent : talents) {
+			std::cout << "\tIt can “" << talent->getDescription() << "”\n";
 		}
 	}
 };
