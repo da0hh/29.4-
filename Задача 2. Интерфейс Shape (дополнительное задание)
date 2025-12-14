@@ -1,0 +1,117 @@
+#include <numbers>
+
+using namespace std;
+
+struct BoundingBoxDimensions {
+	double width = 0;
+	double height = 0;
+};
+
+class Shape {
+public:
+	virtual double square() = 0;
+	virtual BoundingBoxDimensions dimensions() = 0;
+	virtual std::string type() = 0;
+};
+
+class Circle : virtual public Shape {
+	double radius;
+
+public:
+	explicit Circle(double radius) : radius(radius) {}
+	
+	virtual double square() override { return numbers::pi * pow(radius, 2); }
+
+	virtual string type() override { return "Circle"; }
+
+	virtual BoundingBoxDimensions dimensions() override {
+		BoundingBoxDimensions box;
+		box.height = radius * 2;
+		box.width = radius * 2;
+		
+		return box;
+	}
+};
+
+class Triangle : virtual public Shape {
+	double a, b, c;
+	double p = (a + b + c) / 2;
+public:
+	explicit Triangle(double a, double b, double c) : a(a), b(b), c(c) {}
+
+	virtual double square() override {
+		return pow((p * (p - a) * (p - b) * (p - c)), 2);
+	}
+
+	virtual string type() override { return "Triangle"; }
+
+	virtual BoundingBoxDimensions dimensions() override { 
+		double area = square();
+		double radius = (a * b * c) / (4 * area);
+		double res = radius * 2;
+
+		BoundingBoxDimensions box;
+		box.height = res;
+		box.width = res;
+
+		return box;
+	}
+};
+
+class Rectangle : public Shape {
+	double a, b;
+
+public:
+	explicit Rectangle(double a, double b) : a(a), b(b) {}
+
+	virtual double square() override {
+		return a * b;
+	}
+
+	virtual string type() override { return "Rectangle"; }
+
+	virtual BoundingBoxDimensions dimensions() override {
+		BoundingBoxDimensions box;
+		box.height = a;
+		box.width = b;
+
+		return box;
+	}
+};
+
+
+void printParams(Shape* shape) { 
+	cout << "Type: " << shape->type() << endl; 
+	cout << "Square: " << shape->square() << endl;
+	cout << "Width: " << shape->dimensions().width << endl;
+	cout << "Height:  " << shape->dimensions().height << endl;
+}
+
+int main(){
+	setlocale(LC_ALL, "RU");
+	string shape;
+	cout << "Enter wanted shape(Triangle, Circle, Rectangle): "; cin >> shape;
+
+	if (shape == "Triangle") {
+		double a, b, c;
+		cout << "Enter boards(a, b, c): "; cin >> a >> b >> c;
+		Triangle t(a, b, c);
+		printParams(&t);
+	}
+	else if (shape == "Circle") {
+		double radius;
+		cout << "Enter radius: "; cin >> radius;
+		Circle c(radius);
+		printParams(&c);
+	}
+	else if (shape == "Rectangle") {
+		double a, b;
+		cout << "Enter boards(a, b): "; cin >> a >> b;
+		Rectangle r(a, b);
+		printParams(&r);
+	}
+	else {
+		cout << "Unknown shape\n";
+		return 1;
+	}
+}
